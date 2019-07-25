@@ -1,14 +1,14 @@
 {
-  "name": "cordova-plugin-music-controls",
+  "name": "cordova-plugin-music-controls-fixed",
   "version": "2.2.0",
   "description": "Music controls for Cordova apps",
   "cordova": {
-    "id": "cordova-plugin-music-controls",
+    "id": "cordova-plugin-music-controls-fixed",
     "platforms": ["android", "windows", "ios"]
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/homerours/cordova-music-controls-plugin.git"
+    "url": "git+https://github.com/ingageco/cordova-music-controls-plugin.git"
   },
   "keywords": [
     "cordova",
@@ -31,8 +31,8 @@
   "author": "homerours",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/homerours/cordova-music-controls-plugin/issues"
+    "url": "https://github.com/homerours/cordova-music-controls-plugin-fixed/issues"
   },
   "homepage":
-    "https://github.com/homerours/cordova-music-controls-plugin#readme"
+    "https://github.com/homerours/cordova-music-controls-plugin-fixed#readme"
 }
