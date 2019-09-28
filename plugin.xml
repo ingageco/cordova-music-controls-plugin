@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<<<<<<< HEAD
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android"
 	id="cordova-plugin-music-controls-fixed"
-=======
-<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" 
-	id="cordova-plugin-music-controls"
->>>>>>> 9501d794feccf5e6f4e7c2f81ab6b47bf5e86019
 	version="2.2.0">
 	<name>MusicControls</name>
 	<keywords>cordova,music,controller,controls,media,plugin,notification,lockscreen,now,playing</keywords>
