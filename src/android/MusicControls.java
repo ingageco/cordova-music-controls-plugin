@@ -40,6 +40,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class MusicControls extends CordovaPlugin {
+	private static final String TAG = "MusicControls";
+
 	private MusicControlsBroadcastReceiver mMessageReceiver;
 	private MusicControlsNotification notification;
 	private MediaSessionCompat mediaSessionCompat;
@@ -47,6 +49,7 @@ public class MusicControls extends CordovaPlugin {
 	private AudioManager mAudioManager;
 	private PendingIntent mediaButtonPendingIntent;
 	private boolean mediaButtonAccess=true;
+	private ServiceConnection mConnection;
 
   	private Activity cordovaActivity;
 
@@ -96,6 +99,7 @@ public class MusicControls extends CordovaPlugin {
     		this.cordovaActivity = activity;
 
 		this.notification = new MusicControlsNotification(activity,this.notificationID);
+		final MusicControlsNotification my_notification = this.notification;
 		this.mMessageReceiver = new MusicControlsBroadcastReceiver(this);
 		this.registerBroadcaster(mMessageReceiver);
 
@@ -121,9 +125,13 @@ public class MusicControls extends CordovaPlugin {
 		}
 
 		// Notification Killer
-		ServiceConnection mConnection = new ServiceConnection() {
+		mConnection = new ServiceConnection() {
 			public void onServiceConnected(ComponentName className, IBinder binder) {
-				((KillBinder) binder).service.startService(new Intent(activity, MusicControlsNotificationKiller.class));
+				Log.i(TAG, "onServiceConnected");
+				final MusicControlsNotificationKiller service = (MusicControlsNotificationKiller) ((KillBinder) binder).service;
+				my_notification.setKillerService(service);
+				service.startService(new Intent(activity, MusicControlsNotificationKiller.class));
+				Log.i(TAG, "service Started");
 			}
 			public void onServiceDisconnected(ComponentName className) {
 			}
@@ -191,6 +199,13 @@ public class MusicControls extends CordovaPlugin {
 			this.notification.updateDismissable(dismissable);
 			callbackContext.success("success");
 		}
+		else if (action.equals("updateIsPlayingDismissable")){
+			final JSONObject params = args.getJSONObject(0);
+			final boolean dismissable_2 = params.getBoolean("dismissable");
+			final boolean isPlaying_2 = params.getBoolean("isPlaying");
+			this.notification.updateIsPlayingDismissable(isPlaying_2, dismissable_2);
+			callbackContext.success("success");
+		}
 		else if (action.equals("destroy")){
 			this.notification.destroy();
 			this.mMessageReceiver.stopListening();
@@ -213,6 +228,12 @@ public class MusicControls extends CordovaPlugin {
 		this.notification.destroy();
 		this.mMessageReceiver.stopListening();
 		this.unregisterMediaButtonEvent();
+		if (mConnection != null) {
+			final Activity activity = this.cordova.getActivity();
+			Intent stopServiceIntent = new Intent(activity, MusicControlsNotificationKiller.class);
+			activity.unbindService(mConnection);
+			activity.stopService(stopServiceIntent);
+		}
 		super.onDestroy();
 	}
 
